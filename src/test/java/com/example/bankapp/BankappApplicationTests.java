@@ -14,8 +14,8 @@ class BankappApplicationTests {
 
     @Test
     void anotherSampleTest() {
-        String message = "Hello, BankApp!";
+        String message = "Github action CICD Pipeline test!";
         assertNotNull(message, "Message should not be null");
-        assertTrue(message.contains("BankApp"), "Message should contain 'BankApp'");
+        assertTrue(message.contains("Github action"), "Message should contain 'Github action'");
     }
 }
