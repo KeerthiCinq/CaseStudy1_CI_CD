@@ -1,4 +1,4 @@
-name: CICD Pipeline1
+name: CICD Pipeline
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   compile:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
