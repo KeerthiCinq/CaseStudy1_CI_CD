@@ -63,7 +63,7 @@ jobs:
       env: 
         IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
       run: |
-        sudo docker build -t $IMAGE_TAG ./Dockerfile
+        sudo docker build -t $IMAGE_TAG .
 
     - name: Push Docker image to ECR 
       env: 
