@@ -25,6 +25,7 @@ jobs:
 
   build_project_and_sonar_scan:
     runs-on: self-hosted
+    needs: compile
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -62,7 +63,7 @@ jobs:
       env: 
         IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
       run: |
-        sudo docker build -t $IMAGE_TAG -f ./Dockerfile bank-app
+        sudo docker build -t $IMAGE_TAG ./Dockerfile
 
     - name: Push Docker image to ECR 
       env: 
