@@ -130,13 +130,13 @@ jobs:
         aws-region: "us-east-1"
     - name: Build Docker image 
       env: 
-        IMAGE_TAG: "${{ secrets.API_ECR_REPOSITORY }}:bankapp-springboot-image-${{ github.sha }}" 
+        IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
       run: |
-        docker build -t $IMAGE_TAG -f api-gateway/Dockerfile api-gateway
+        docker build -t $IMAGE_TAG -f ./Dockerfile bank-app
 
     - name: Push Docker image to ECR 
       env: 
-        IMAGE_TAG: "${{ secrets.API_ECR_REPOSITORY }}:bankapp-springboot-image-${{ github.sha }}" 
+        IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
       run: | 
         docker push $IMAGE_TAG
 
