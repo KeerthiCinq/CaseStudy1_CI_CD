@@ -2,7 +2,10 @@ name: CICD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+      - main
+      - qa
+      - prod
 
 jobs:
   compile:
@@ -169,7 +172,7 @@ jobs:
 
     - name: Update kubeconfig
       run: |
-        aws eks update-kubeconfig --name demo-cluster --region us-east-1
+        aws eks update-kubeconfig --name demo-cluster5--region us-east-1
     - name: Check Kubernetes config
       run: |
         cat ~/.kube/config
