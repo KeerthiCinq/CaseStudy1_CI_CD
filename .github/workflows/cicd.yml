@@ -64,13 +64,17 @@ jobs:
     - name: Log in to Amazon ECR 
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build and Push Docker image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        push: true
-        tags: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
-        file: ./Dockerfile
+    - name: Build Docker image 
+      env: 
+        IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
+      run: |
+        sudo docker build -t $IMAGE_TAG .
+
+    - name: Push Docker image to ECR 
+      env: 
+        IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
+      run: | 
+        sudo docker push $IMAGE_TAG
         
 
 
