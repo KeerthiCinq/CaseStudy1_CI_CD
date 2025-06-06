@@ -11,11 +11,4 @@ class BankappApplicationTests {
         int actual = 40 + 2;
         assertEquals(expected, actual, "Simple addition should equal 42");
     }
-
-    @Test
-    void anotherSampleTest() {
-        String message = "Github action CICD Pipeline test!";
-        assertNotNull(message, "Message should not be null");
-        assertTrue(message.contains("Github action"), "Message should contain 'Github action'");
-    }
 }
