@@ -9,6 +9,6 @@ class BankappApplicationTests {
     void sampleTest() {
         int expected = 42;
         int actual = 40 + 2;
-        assertEquals(expected, actual, "Simple addition should equal 42");
+        assertEquals(expected, actual, "Simple addition should be equal to 42");
     }
 }
