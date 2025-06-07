@@ -43,7 +43,7 @@ jobs:
         path: target/*.jar 
         
 
-  buils_docker_image_and_push:
+  builds_docker_image_and_push:
     runs-on: self-hosted
     needs: build_project_and_sonar_scan
     steps:
@@ -84,28 +84,8 @@ jobs:
 
   deploy_to_kubernetes:
     runs-on: self-hosted
-    needs: buils_docker_image_and_push
+    needs: builds_docker_image_and_push
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-   
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: latest
-    - name: Configure kubeconfig
-      run: |
-        mkdir -p $HOME/.kube
-        echo "${{ secrets.EKS_KUBECONFIG }}" > $HOME/.kube/config
-    - name: Deploy to EKS
-      run: |
-        kubectl apply -f ds.yml
 
     - name: Update kubeconfig
       run: |
