@@ -5,7 +5,7 @@ on:
     branches: 
       - dev
       - qa
-      - main
+      - prod
 
 jobs:
   compile:
@@ -145,21 +145,99 @@ jobs:
       run: | 
         docker push $IMAGE_TAG
 
-
-  deploy_to_kubernetes:
+      
+ 
+  deploy_to_prod:
     runs-on: self-hosted
-    needs: builds_docker_image_and_push
+    if: github.event.ref == 'refs/heads/prod'
+    needs: [builds_docker_image_and_push]
+    environment:
+      name: prod
     steps:
-
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: "us-east-1"
+        
+    - name: Log in to Amazon ECR 
+      uses: aws-actions/amazon-ecr-login@v1
     - name: Update kubeconfig
       run: |
-        aws eks update-kubeconfig --name eks-cluster--region us-east-1
-    - name: Check Kubernetes config
+        aws eks update-kubeconfig --name eks-cluster --region us-east-1
+    - name: Configure kubeconfig
       run: |
-        cat ~/.kube/config
-        kubectl cluster-info
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.EKS_KUBECONFIG }}" > $HOME/.kube/config
+        
     - name: Deploy springboot microservice
+      env:
+          SPRINGBOOT_APP_IMAGE: ${{ secrets.SPRINGBOOT_APP_IMAGE }}
+          IMAGE_TAG: "bankapp-springboot-image-de923544e076328c17dce3f3c068543ec846078f"
       run: |
-        ClusterEnv=${{steps.set-env.outputs.env}}
-        NAMESPACE=${ClusterEnv}
-        kubectl apply -f ds.yml --namespace ${NAMESPACE}
+        kubectl set image deployment/bankapp bankapp=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace prod
+
+  
+  deploy_to_dev:
+    runs-on: self-hosted
+    if: github.event.ref == 'refs/heads/dev'
+    needs: [builds_docker_image_and_push]
+    steps:
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: "us-east-1"
+        
+    - name: Log in to Amazon ECR 
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --name eks-cluster --region us-east-1
+    - name: Configure kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.EKS_KUBECONFIG }}" > $HOME/.kube/config
+        
+    - name: Deploy springboot microservice
+      env:
+          SPRINGBOOT_APP_IMAGE: ${{ secrets.SPRINGBOOT_APP_IMAGE }}
+          IMAGE_TAG: "bankapp-springboot-image-de923544e076328c17dce3f3c068543ec846078f"
+      run: |
+        kubectl set image deployment/bankapp bankapp=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace dev
+
+  deploy_to_qa:
+    runs-on: self-hosted
+    if: github.event.ref == 'refs/heads/qa'
+    needs: [builds_docker_image_and_push]
+    steps:
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: "us-east-1"
+        
+    - name: Log in to Amazon ECR 
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --name eks-cluster --region us-east-1
+    - name: Configure kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.EKS_KUBECONFIG }}" > $HOME/.kube/config
+        
+    - name: Deploy springboot microservice
+      env:
+          SPRINGBOOT_APP_IMAGE: ${{ secrets.SPRINGBOOT_APP_IMAGE }}
+          IMAGE_TAG: "bankapp-springboot-image-de923544e076328c17dce3f3c068543ec846078f"
+      run: |
+        kubectl set image deployment/bankapp bankapp=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace qa
+
+  
