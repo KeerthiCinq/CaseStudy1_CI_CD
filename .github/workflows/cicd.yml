@@ -6,6 +6,7 @@ on:
       - dev
       - qa
       - main
+      - prod
 
 jobs:
   compile:
