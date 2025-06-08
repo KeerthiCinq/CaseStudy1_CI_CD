@@ -36,4 +36,4 @@ jobs:
           SPRINGBOOT_APP_IMAGE: ${{ secrets.SPRINGBOOT_APP_IMAGE }}
           IMAGE_TAG: "bankapp-springboot-image-de923544e076328c17dce3f3c068543ec846078f"
       run: |
-        kubectl set image deployment/bankapp springboot_app_image=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace prod
+        kubectl set image deployment/bankapp bankapp=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace prod
