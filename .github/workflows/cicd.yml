@@ -26,6 +26,11 @@ jobs:
     - name: Update kubeconfig
       run: |
         aws eks update-kubeconfig --name eks-cluster --region us-east-1
+    - name: Configure kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.EKS_KUBECONFIG }}" > $HOME/.kube/config
+        
     - name: Deploy springboot microservice
       run: |
         kubectl apply -f ds.yml --namespace prod
