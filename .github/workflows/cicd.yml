@@ -174,8 +174,8 @@ jobs:
         
     - name: Deploy springboot microservice
       env:
+          IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
           SPRINGBOOT_APP_IMAGE: ${{ secrets.SPRINGBOOT_APP_IMAGE }}
-          IMAGE_TAG: "bankapp-springboot-image-de923544e076328c17dce3f3c068543ec846078f"
       run: |
         kubectl set image deployment/bankapp bankapp=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace prod
 
@@ -205,8 +205,8 @@ jobs:
         
     - name: Deploy springboot microservice
       env:
+          IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
           SPRINGBOOT_APP_IMAGE: ${{ secrets.SPRINGBOOT_APP_IMAGE }}
-          IMAGE_TAG: "bankapp-springboot-image-de923544e076328c17dce3f3c068543ec846078f"
       run: |
         kubectl set image deployment/bankapp bankapp=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace dev
 
@@ -235,8 +235,8 @@ jobs:
         
     - name: Deploy springboot microservice
       env:
+          IMAGE_TAG: "${{ secrets.SPRINGBOOT_APP_IMAGE }}:bankapp-springboot-image-${{ github.sha }}" 
           SPRINGBOOT_APP_IMAGE: ${{ secrets.SPRINGBOOT_APP_IMAGE }}
-          IMAGE_TAG: "bankapp-springboot-image-de923544e076328c17dce3f3c068543ec846078f"
       run: |
         kubectl set image deployment/bankapp bankapp=$SPRINGBOOT_APP_IMAGE:$IMAGE_TAG --namespace qa
 
