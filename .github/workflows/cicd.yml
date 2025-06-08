@@ -26,10 +26,6 @@ jobs:
     - name: Update kubeconfig
       run: |
         aws eks update-kubeconfig --name eks-cluster --region us-east-1
-    - name: Check Kubernetes config
-      run: |
-        cat ~/.kube/config
-        kubectl cluster-info
     - name: Deploy springboot microservice
       run: |
         kubectl apply -f ds.yml --namespace prod
