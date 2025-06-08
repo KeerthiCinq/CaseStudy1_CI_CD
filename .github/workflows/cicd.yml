@@ -21,6 +21,7 @@ jobs:
  
   deploy_to_prod:
     runs-on: self-hosted
+    if: github.event.ref == 'refs/heads/prod'
     needs: [dummytest]
     environment:
       name: prod
@@ -55,6 +56,7 @@ jobs:
   
   deploy_to_dev:
     runs-on: self-hosted
+    if: github.event.ref == 'refs/heads/dev'
     needs: [dummytest]
     steps:
     
